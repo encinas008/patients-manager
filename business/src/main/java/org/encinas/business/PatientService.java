@@ -1,8 +1,12 @@
 package org.encinas.business;
 
+import org.encinas.business.dtos.HistoryDto;
 import org.encinas.business.dtos.PatientDto;
+import org.encinas.business.parsers.HistoryParser;
 import org.encinas.business.parsers.PatientParser;
+import org.encinas.dao.entity.HistoryEntity;
 import org.encinas.dao.entity.PatientEntity;
+import org.encinas.dao.repository.HistoryDao;
 import org.encinas.dao.repository.PatientDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +20,13 @@ public class PatientService {
     PatientDao patientDao;
 
     @Autowired
+    HistoryDao historyDao;
+
+    @Autowired
     PatientParser patientParser;
+
+    @Autowired
+    HistoryParser historyParser;
 
     public List<PatientDto> getPatients() {
         List<PatientDto> patientList = new ArrayList<>();
@@ -33,8 +43,19 @@ public class PatientService {
     public PatientDto createPatient(PatientDto patientDto) {
         PatientEntity patientEntity = patientParser.parseDtoToEntity(patientDto);
         PatientEntity patientSaved = patientDao.save(patientEntity);
-        PatientDto resultPatient = patientParser.parseEntityToDto(patientSaved);
 
-        return resultPatient;
+        return patientParser.parseEntityToDto(patientSaved);
+    }
+
+    public HistoryDto createHistory(int patientId, HistoryDto historyDto) {
+        PatientEntity patientEntity = patientDao.findById(patientId).orElse(null);
+        if (patientEntity != null) {
+            HistoryEntity historyEntity = historyParser.parseDtoToEntity(historyDto);
+            patientEntity.getHistories().add(historyEntity);
+            patientDao.save(patientEntity);
+
+            return historyParser.parseEntityToDto(historyEntity);
+        }
+        return null;
     }
 }

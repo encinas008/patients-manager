@@ -3,7 +3,7 @@ spring:
     templateResolverOrder: 1
   datasource:
     driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:sqlserver://localhost;databaseName=db_manage_patients
+    url: jdbc:sqlserver://localhost;databaseName=db_patients
     username: sa
     password: myPassw0rd
   jpa:
