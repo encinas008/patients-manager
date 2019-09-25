@@ -1,9 +1,8 @@
 package org.encinas.business.dtos;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter @Setter
+@Data
 public class HistoryDto {
     private int bloodSugarLevel;
     private double weight;

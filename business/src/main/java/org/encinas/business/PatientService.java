@@ -1,10 +1,7 @@
 package org.encinas.business;
 
-import org.encinas.business.dtos.HistoryDto;
 import org.encinas.business.dtos.PatientDto;
-import org.encinas.business.parsers.HistoryParser;
 import org.encinas.business.parsers.PatientParser;
-import org.encinas.dao.entity.HistoryEntity;
 import org.encinas.dao.entity.PatientEntity;
 import org.encinas.dao.repository.PatientDao;
 import org.springframework.stereotype.Service;
@@ -16,12 +13,17 @@ import java.util.List;
 public class PatientService {
     private PatientDao patientDao;
     private PatientParser patientParser;
-    private HistoryParser historyParser;
 
-    public PatientService(PatientDao patientDao, PatientParser patientParser, HistoryParser historyParser) {
+    public PatientService(PatientDao patientDao, PatientParser patientParser) {
         this.patientDao = patientDao;
         this.patientParser = patientParser;
-        this.historyParser = historyParser;
+    }
+
+    public PatientDto createPatient(PatientDto patientDto) {
+        PatientEntity patientEntity = patientParser.parseDtoToEntity(patientDto);
+        PatientEntity patientSaved = patientDao.save(patientEntity);
+
+        return patientParser.parseEntityToDto(patientSaved);
     }
 
     public List<PatientDto> getPatients() {
@@ -36,30 +38,36 @@ public class PatientService {
         return patientList;
     }
 
-    public PatientDto createPatient(PatientDto patientDto) {
-        PatientEntity patientEntity = patientParser.parseDtoToEntity(patientDto);
-        PatientEntity patientSaved = patientDao.save(patientEntity);
-
-        return patientParser.parseEntityToDto(patientSaved);
-    }
-
-    public HistoryDto createHistory(int patientId, HistoryDto historyDto) {
-        PatientEntity patientEntity = patientDao.findById(patientId).orElse(null);
-        if (patientEntity != null) {
-            HistoryEntity historyEntity = historyParser.parseDtoToEntity(historyDto);
-            patientEntity.getHistories().add(historyEntity);
-            patientDao.save(patientEntity);
-
-            return historyParser.parseEntityToDto(historyEntity);
-        }
-        return null;
-    }
-
     public PatientDto getPatient(int id) {
-        PatientEntity patientEntity = patientDao.findById(id).orElse(null);
+        PatientEntity patientEntity = patientDao.getOne(id);
         if (patientEntity != null) {
             return patientParser.parseEntityToDto(patientEntity);
         }
+
         return null;
+    }
+
+    public PatientDto updatePatient(int patientId, PatientDto patientDto) {
+        PatientEntity patientEntity = patientDao.getOne(patientId);
+        if (patientEntity != null) {
+            patientEntity.setFullName(patientDto.getFullName());
+            patientEntity.setDni(patientDto.getDni());
+            patientEntity.setAddress(patientDto.getAddress());
+            patientDao.save(patientEntity);
+
+            return patientParser.parseEntityToDto(patientEntity);
+        }
+
+        return null;
+    }
+
+    public boolean deletePatient(int patientId) {
+        PatientEntity patientEntity = patientDao.getOne(patientId);
+        if (patientEntity != null) {
+            patientDao.delete(patientEntity);
+            return Boolean.TRUE;
+        }
+
+        return Boolean.FALSE;
     }
 }

@@ -14,5 +14,4 @@ public class PatientDto {
     private String dni;
     @Length(min = 3, max = 300)
     private String address;
-    private LocalDate birthDate;
 }

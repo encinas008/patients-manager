@@ -1,7 +1,6 @@
 package org.encinas.business;
 
 import org.encinas.business.dtos.PatientDto;
-import org.encinas.business.parsers.HistoryParser;
 import org.encinas.business.parsers.PatientParser;
 import org.encinas.dao.entity.PatientEntity;
 import org.encinas.dao.repository.PatientDao;
@@ -12,8 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDate;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,13 +32,11 @@ public class PatientServiceTests {
         patientEntity.setFullName("Rafael Encinas");
         patientEntity.setDni("7888281R");
         patientEntity.setAddress("Av KapaYupanqui");
-        patientEntity.setBirthDate(LocalDate.of(1985, 10,8));
 
         when(patientDao.save(any(PatientEntity.class))).thenReturn(patientEntity);
         PatientParser patientParser = new PatientParser();
-        HistoryParser historyParser = new HistoryParser();
 
-        sut = new PatientService(patientDao, patientParser, historyParser);
+        sut = new PatientService(patientDao, patientParser);
     }
 
     @After
@@ -56,7 +51,6 @@ public class PatientServiceTests {
         patientDto.setFullName("Rafael Encinas");
         patientDto.setDni("7888281R");
         patientDto.setAddress("Av KapaYupanqui");
-        patientDto.setBirthDate(LocalDate.of(1985, 10,8));
         PatientDto result = sut.createPatient(patientDto);
 
         PatientDto expectedPatient = new PatientDto();
@@ -64,7 +58,6 @@ public class PatientServiceTests {
         expectedPatient.setFullName("Rafael Encinas");
         expectedPatient.setDni("7888281R");
         expectedPatient.setAddress("Av KapaYupanqui");
-        expectedPatient.setBirthDate(LocalDate.of(1985, 10,8));
 
         assertEquals(expectedPatient, result);
     }

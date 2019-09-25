@@ -17,12 +17,11 @@ public class PatientEntity {
     private int id;
     @Column(length = 50)
     private String fullName;
-    @Column(length = 15)
+
+    @Column(length = 15, unique = true)
     private String dni;
     @Column(length=300)
     private String address;
-    @Column
-    private LocalDate birthDate;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id")
