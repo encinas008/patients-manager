@@ -5,13 +5,13 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity()
+@Entity
 @Table(name = "history")
 @Getter @Setter
-public class HistoryEntity {
+public class History {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
     @Column(length = 3)
     private int bloodSugarLevel;
     @Column(length = 5)

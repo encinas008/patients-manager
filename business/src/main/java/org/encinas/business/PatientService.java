@@ -2,12 +2,13 @@ package org.encinas.business;
 
 import org.encinas.business.dtos.PatientDto;
 import org.encinas.business.parsers.PatientParser;
-import org.encinas.dao.entity.PatientEntity;
+import org.encinas.dao.entity.Patient;
 import org.encinas.dao.repository.PatientDao;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PatientService {
@@ -20,8 +21,8 @@ public class PatientService {
     }
 
     public PatientDto createPatient(PatientDto patientDto) {
-        PatientEntity patientEntity = patientParser.parseDtoToEntity(patientDto);
-        PatientEntity patientSaved = patientDao.save(patientEntity);
+        Patient patient = patientParser.parseDtoToEntity(patientDto);
+        Patient patientSaved = patientDao.save(patient);
 
         return patientParser.parseEntityToDto(patientSaved);
     }
@@ -29,9 +30,9 @@ public class PatientService {
     public List<PatientDto> getPatients() {
         List<PatientDto> patientList = new ArrayList<>();
 
-        List<PatientEntity> patientEntities = patientDao.findAll();
-        for (PatientEntity patientEntity: patientEntities) {
-            PatientDto patientDto = patientParser.parseEntityToDto(patientEntity);
+        List<Patient> patientEntities = patientDao.findAll();
+        for (Patient patient : patientEntities) {
+            PatientDto patientDto = patientParser.parseEntityToDto(patient);
             patientList.add(patientDto);
         }
 
@@ -39,17 +40,14 @@ public class PatientService {
     }
 
     public PatientDto getPatient(int id) {
-        PatientEntity patientEntity = patientDao.getOne(id);
-        if (patientEntity != null) {
-            return patientParser.parseEntityToDto(patientEntity);
-        }
-
-        return null;
+        Optional<Patient> patient = patientDao.findById(id);
+        return patient.map(value -> patientParser.parseEntityToDto(value)).orElse(null);
     }
 
     public PatientDto updatePatient(int patientId, PatientDto patientDto) {
-        PatientEntity patientEntity = patientDao.getOne(patientId);
-        if (patientEntity != null) {
+        Optional<Patient> patient = patientDao.findById(patientId);
+        if (patient.isPresent()) {
+            Patient patientEntity = patient.get();
             patientEntity.setFullName(patientDto.getFullName());
             patientEntity.setDni(patientDto.getDni());
             patientEntity.setAddress(patientDto.getAddress());
@@ -62,9 +60,9 @@ public class PatientService {
     }
 
     public boolean deletePatient(int patientId) {
-        PatientEntity patientEntity = patientDao.getOne(patientId);
-        if (patientEntity != null) {
-            patientDao.delete(patientEntity);
+        Optional<Patient> patient = patientDao.findById(patientId);
+        if (patient.isPresent()) {
+            patientDao.delete(patient.get());
             return Boolean.TRUE;
         }
 

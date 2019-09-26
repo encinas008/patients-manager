@@ -3,11 +3,9 @@ package org.encinas.business.dtos;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
-import java.time.LocalDate;
-
 @Data
 public class PatientDto {
-    private int id;
+    private Integer id;
     @Length(min = 3, max = 50)
     private String fullName;
     @Length(min = 3, max = 15)

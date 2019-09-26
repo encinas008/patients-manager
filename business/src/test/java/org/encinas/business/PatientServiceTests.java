@@ -2,7 +2,7 @@ package org.encinas.business;
 
 import org.encinas.business.dtos.PatientDto;
 import org.encinas.business.parsers.PatientParser;
-import org.encinas.dao.entity.PatientEntity;
+import org.encinas.dao.entity.Patient;
 import org.encinas.dao.repository.PatientDao;
 import org.junit.After;
 import org.junit.Before;
@@ -27,13 +27,13 @@ public class PatientServiceTests {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        PatientEntity patientEntity = new PatientEntity();
-        patientEntity.setId(1);
-        patientEntity.setFullName("Rafael Encinas");
-        patientEntity.setDni("7888281R");
-        patientEntity.setAddress("Av KapaYupanqui");
+        Patient patient = new Patient();
+        patient.setId(1);
+        patient.setFullName("Rafael Encinas");
+        patient.setDni("7888281R");
+        patient.setAddress("Av KapaYupanqui");
 
-        when(patientDao.save(any(PatientEntity.class))).thenReturn(patientEntity);
+        when(patientDao.save(any(Patient.class))).thenReturn(patient);
         PatientParser patientParser = new PatientParser();
 
         sut = new PatientService(patientDao, patientParser);

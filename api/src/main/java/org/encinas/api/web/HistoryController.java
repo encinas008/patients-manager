@@ -31,8 +31,8 @@ public class HistoryController {
 
     @DeleteMapping(value = "/{id}", name = "Deletes a History")
     public ResponseEntity deleteHistory(@PathVariable("id") int historyId) {
-        Boolean resultDeleted = historyService.deleteHistory(historyId);
+        historyService.deleteHistory(historyId);
 
-        return new ResponseEntity<>(resultDeleted, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

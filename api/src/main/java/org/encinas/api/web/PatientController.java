@@ -27,7 +27,7 @@ public class PatientController {
     public ResponseEntity createPatient(@Valid @RequestBody PatientDto patientDto) {
         PatientDto patient = patientService.createPatient(patientDto);
 
-        return new ResponseEntity<>(patient, HttpStatus.OK);
+        return new ResponseEntity<>(patient, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}", name = "Updates a patient.")
@@ -39,16 +39,16 @@ public class PatientController {
 
     @DeleteMapping(value = "/{id}", name = "Deletes a patient.")
     public ResponseEntity deletePatient(@PathVariable("id") int patientId) {
-        Boolean resultDelete = patientService.deletePatient(patientId);
+        patientService.deletePatient(patientId);
 
-        return new ResponseEntity<>(resultDelete, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping(value = "/{patientId}/histories", name = "Creates a history for a patient.")
     public ResponseEntity addHistory(@PathVariable("patientId") int patientId, @RequestBody HistoryDto historyDto) {
         HistoryDto history = historyService.createHistory(patientId, historyDto);
 
-        return new ResponseEntity<>(history, HttpStatus.OK);
+        return new ResponseEntity<>(history, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{patientId}/histories", name = "Gets histories for a patient.")

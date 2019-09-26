@@ -1,6 +1,6 @@
 package org.encinas.api.web.error.handler;
 
-import org.encinas.business.responses.RequestResponse;
+import org.encinas.business.responses.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 @Component
-class HandlerException extends ResponseEntityExceptionHandler {
+public class HandlerException extends ResponseEntityExceptionHandler {
     private static final String WHITESPACE = " ";
 
     @Override
@@ -28,9 +28,9 @@ class HandlerException extends ResponseEntityExceptionHandler {
             message = message.append(error.getDefaultMessage()).append(" for ").append(error.getField()).append(WHITESPACE);
         }
 
-        RequestResponse requestResponse = new RequestResponse(HttpStatus.BAD_REQUEST, message.toString(), null);
+        Response response = new Response(HttpStatus.BAD_REQUEST, message.toString(), null);
 
-        return new ResponseEntity<>(requestResponse, requestResponse.getStatusCode());
+        return new ResponseEntity<>(response, response.getStatusCode());
     }
 
     @Override
@@ -39,7 +39,7 @@ class HandlerException extends ResponseEntityExceptionHandler {
             HttpStatus status, WebRequest request) {
         String error = ex.getParameterName() + " parameter is missing";
 
-        RequestResponse requestResponse = new RequestResponse(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
-        return new ResponseEntity<>(requestResponse, requestResponse.getStatusCode());
+        Response response = new Response(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
+        return new ResponseEntity<>(response, response.getStatusCode());
     }
 }

@@ -2,14 +2,15 @@ package org.encinas.business;
 
 import org.encinas.business.dtos.HistoryDto;
 import org.encinas.business.parsers.HistoryParser;
-import org.encinas.dao.entity.HistoryEntity;
-import org.encinas.dao.entity.PatientEntity;
+import org.encinas.dao.entity.History;
+import org.encinas.dao.entity.Patient;
 import org.encinas.dao.repository.HistoryDao;
 import org.encinas.dao.repository.PatientDao;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HistoryService {
@@ -24,31 +25,28 @@ public class HistoryService {
     }
 
     public HistoryDto createHistory(int patientId, HistoryDto historyDto) {
-        PatientEntity patientEntity = patientDao.getOne(patientId);
-        if (patientEntity != null) {
-            HistoryEntity historyEntity = historyParser.parseDtoToEntity(historyDto);
-            patientEntity.getHistories().add(historyEntity);
+        Optional<Patient> patient = patientDao.findById(patientId);
+        if (patient.isPresent()) {
+            Patient patientEntity = patient.get();
+            History history = historyParser.parseDtoToEntity(historyDto);
+            patientEntity.getHistories().add(history);
             patientDao.save(patientEntity);
 
-            return historyParser.parseEntityToDto(historyEntity);
+            return historyParser.parseEntityToDto(history);
         }
 
         return null;
     }
 
     public HistoryDto getHistoryById(int historyId) {
-        HistoryEntity historyEntity = historyDao.getOne(historyId);
-        if (historyEntity != null) {
-            return historyParser.parseEntityToDto(historyEntity);
-        }
-
-        return null;
+        Optional<History> history = historyDao.findById(historyId);
+        return history.map(value -> historyParser.parseEntityToDto(value)).orElse(null);
     }
 
     public Boolean deleteHistory(int historyId) {
-        HistoryEntity historyEntity = historyDao.getOne(historyId);
-        if (historyEntity != null) {
-            historyDao.delete(historyEntity);
+        Optional<History> history = historyDao.findById(historyId);
+        if (history.isPresent()) {
+            historyDao.delete(history.get());
             return Boolean.TRUE;
         }
 
@@ -56,8 +54,9 @@ public class HistoryService {
     }
 
     public HistoryDto updateHistory(int historyId, HistoryDto historyDto) {
-        HistoryEntity historyEntity = historyDao.getOne(historyId);
-        if (historyEntity != null) {
+        Optional<History> history = historyDao.findById(historyId);
+        if (history.isPresent()) {
+            History historyEntity = history.get();
             historyEntity.setBloodSugarLevel(historyDto.getBloodSugarLevel());
             historyEntity.setHeight(historyDto.getHeight());
             historyEntity.setWeight(historyDto.getWeight());
@@ -73,12 +72,12 @@ public class HistoryService {
     }
 
     public List<HistoryDto> getHistoriesByPatientId(int patientId) {
-        PatientEntity patientEntity = patientDao.getOne(patientId);
+        Optional<Patient> patient = patientDao.findById(patientId);
         List<HistoryDto> historyDtoList = new ArrayList<>();
-        if (patientEntity != null) {
-            List<HistoryEntity> historyEntities = patientEntity.getHistories();
-            for (HistoryEntity historyEntity: historyEntities) {
-                HistoryDto historyDto = historyParser.parseEntityToDto(historyEntity);
+        if (patient.isPresent()) {
+            List<History> historyEntities = patient.get().getHistories();
+            for (History history : historyEntities) {
+                HistoryDto historyDto = historyParser.parseEntityToDto(history);
                 historyDtoList.add(historyDto);
             }
         }
