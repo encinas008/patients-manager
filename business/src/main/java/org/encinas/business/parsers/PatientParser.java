@@ -3,7 +3,6 @@ package org.encinas.business.parsers;
 import org.encinas.business.dtos.PatientDto;
 import org.encinas.dao.entity.PatientEntity;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
