@@ -1,8 +1,8 @@
 package org.encinas.business.dtos;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -13,17 +13,17 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class PatientDtoTests {
+public class PatientDtoTest {
     private static ValidatorFactory validatorFactory;
     private static Validator validator;
 
-    @BeforeClass
+    @BeforeAll
     public static void createValidator() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
     }
 
-    @AfterClass
+    @AfterAll
     public static void close() {
         validatorFactory.close();
     }
@@ -48,12 +48,8 @@ public class PatientDtoTests {
         sut.setAddress("Av. Canada");
 
         Set<ConstraintViolation<PatientDto>> violations = validator.validate(sut);
-
-        assertEquals(violations.size(), 1);
-
         ConstraintViolation<PatientDto> violation = violations.iterator().next();
-        assertEquals("length must be between 3 and 50", violation.getMessage());
-        assertEquals("fullName", violation.getPropertyPath().toString());
+
         assertEquals("Ra", violation.getInvalidValue());
     }
 
@@ -65,11 +61,8 @@ public class PatientDtoTests {
         sut.setAddress("Av. Canada");
 
         Set<ConstraintViolation<PatientDto>> violations = validator.validate(sut);
-
-        assertEquals(violations.size(), 1);
-
         ConstraintViolation<PatientDto> violation = violations.iterator().next();
-        assertEquals("length must be between 3 and 50", violation.getMessage());
-        assertEquals("fullName", violation.getPropertyPath().toString());
+
+        assertEquals("Joseph Joseph Joseph Joseph Joseph Joseph Joseph Joseph", violation.getInvalidValue());
     }
 }

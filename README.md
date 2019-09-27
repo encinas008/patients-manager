@@ -20,7 +20,6 @@ I use a multi-tier architectural model where the tiers order in the list, is str
 ## Files Structure
 ````bash
 ├── api
-│   ├── api.iml
 │   ├── pom.xml
 │   └── src
 │       ├── main
@@ -36,7 +35,7 @@ I use a multi-tier architectural model where the tiers order in the list, is str
 │       │   │                   ├── PatientController.java
 │       │   │                   └── error
 │       │   │                       └── handler
-│       │   │                           └── ErrorHandler.java
+│       │   │                           └── HandlerException.java
 │       │   └── resources
 │       │       └── application.yml
 │       └── test
@@ -45,7 +44,6 @@ I use a multi-tier architectural model where the tiers order in the list, is str
 │                   └── encinas
 │                       └── api
 ├── business
-│   ├── business.iml
 │   ├── pom.xml
 │   └── src
 │       ├── main
@@ -60,24 +58,23 @@ I use a multi-tier architectural model where the tiers order in the list, is str
 │       │                   ├── dtos
 │       │                   │   ├── HistoryDto.java
 │       │                   │   └── PatientDto.java
+│       │                   ├── exceptions
+│       │                   │   └── DuplicatedDniException.java
 │       │                   ├── parsers
 │       │                   │   ├── HistoryParser.java
 │       │                   │   ├── Parser.java
 │       │                   │   └── PatientParser.java
 │       │                   └── responses
-│       │                       └── RequestResponse.java
+│       │                       └── Response.java
 │       └── test
 │           └── java
 │               └── org
 │                   └── encinas
 │                       └── business
-│                           ├── PatientServiceTests.java
+│                           ├── PatientServiceTest.java
 │                           └── dtos
-│                               └── PatientDtoTests.java
+│                               └── PatientDtoTest.java
 ├── dao
-│   ├── dao.iml
-│   ├── mvnw
-│   ├── mvnw.cmd
 │   ├── pom.xml
 │   └── src
 │       ├── main
@@ -88,8 +85,8 @@ I use a multi-tier architectural model where the tiers order in the list, is str
 │       │                   ├── configuration
 │       │                   │   └── DaoConfiguration.java
 │       │                   ├── entity
-│       │                   │   ├── HistoryEntity.java
-│       │                   │   └── PatientEntity.java
+│       │                   │   ├── History.java
+│       │                   │   └── Patient.java
 │       │                   └── repository
 │       │                       ├── HistoryDao.java
 │       │                       └── PatientDao.java
@@ -98,9 +95,7 @@ I use a multi-tier architectural model where the tiers order in the list, is str
 │               └── org
 │                   └── encinas
 │                       └── dao
-│                           └── DaoApplicationTests.java
 ├── pom.xml
-└── springboot-rec-architecture.iml
 ````
 
 ### API ![#c5f015](https://placehold.it/15/c5f015/000000?text=+)
@@ -121,9 +116,11 @@ We probably need to interoperate with other systems that don’t depend on our d
 ######(TODO)
 It represents the Interface (UI), this type of application must be completely separated from the application and the usage of the Rest technology already guarantees this aspect
 
-### Used
-* Spring boot (2.1.8)
+### Technologies used
+* Java 8
+* Spring boot (2.1.8.RELEASE)
 * Spring Data JPA
 * JUnit 5
 * Mockito
 * PostgreSQL (42.2.5)
+* Maven (3.6.2)

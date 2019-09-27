@@ -1,6 +1,7 @@
 package org.encinas.business;
 
 import org.encinas.business.dtos.PatientDto;
+import org.encinas.business.exceptions.DuplicatedDniException;
 import org.encinas.business.parsers.PatientParser;
 import org.encinas.dao.entity.Patient;
 import org.encinas.dao.repository.PatientDao;
@@ -20,9 +21,14 @@ public class PatientService {
         this.patientParser = patientParser;
     }
 
-    public PatientDto createPatient(PatientDto patientDto) {
-        Patient patient = patientParser.parseDtoToEntity(patientDto);
-        Patient patientSaved = patientDao.save(patient);
+    public PatientDto createPatient(PatientDto patientDto) throws DuplicatedDniException {
+        Patient patient = patientDao.findPatientByDni(patientDto.getDni());
+        if (patient != null) {
+            throw new DuplicatedDniException("DNI already is taken");
+        }
+
+        Patient patientEntity = patientParser.parseDtoToEntity(patientDto);
+        Patient patientSaved = patientDao.save(patientEntity);
 
         return patientParser.parseEntityToDto(patientSaved);
     }

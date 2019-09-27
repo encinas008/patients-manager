@@ -13,15 +13,19 @@ public class History {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     @Column(length = 3)
-    private int bloodSugarLevel;
+    private Integer bloodSugarLevel;
     @Column(length = 5)
-    private double weight;
+    private Double weight;
     @Column(length = 3)
-    private double height;
+    private Double height;
     @Column(length = 300)
     private String symptom;
     @Column(length = 300)
     private String treatment;
     @Column(length = 100)
     private String observation;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
 }

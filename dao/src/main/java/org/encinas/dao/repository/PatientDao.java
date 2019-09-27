@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PatientDao extends JpaRepository<Patient, Integer> {
+    Patient findPatientByDni(String dni);
 }

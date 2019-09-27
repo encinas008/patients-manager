@@ -29,8 +29,8 @@ public class HistoryService {
         if (patient.isPresent()) {
             Patient patientEntity = patient.get();
             History history = historyParser.parseDtoToEntity(historyDto);
-            patientEntity.getHistories().add(history);
-            patientDao.save(patientEntity);
+            history.setPatient(patientEntity);
+            historyDao.save(history);
 
             return historyParser.parseEntityToDto(history);
         }
