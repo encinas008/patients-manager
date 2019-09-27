@@ -116,7 +116,7 @@ We probably need to interoperate with other systems that don’t depend on our d
 ######(TODO)
 It represents the Interface (UI), this type of application must be completely separated from the application and the usage of the Rest technology already guarantees this aspect
 
-### Technologies used
+### TECHNOLOGIES USED
 * Java 8
 * Spring boot (2.1.8.RELEASE)
 * Spring Data JPA
