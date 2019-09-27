@@ -18,7 +18,7 @@ public class Patient {
     private String fullName;
     @Column(length = 15, unique = true)
     private String dni;
-    @Column(length=300)
+    @Column(length=100)
     private String address;
 
     @OneToMany(cascade = CascadeType.ALL)

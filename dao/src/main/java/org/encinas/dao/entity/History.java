@@ -18,9 +18,9 @@ public class History {
     private Double weight;
     @Column(length = 3)
     private Double height;
-    @Column(length = 300)
+    @Column(length = 100)
     private String symptom;
-    @Column(length = 300)
+    @Column(length = 100)
     private String treatment;
     @Column(length = 100)
     private String observation;
